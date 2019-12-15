@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
@@ -247,8 +248,17 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  void _setStatusBarColor() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Color(0xFF00194A)
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    _setStatusBarColor();
+
     return Material(
       type: MaterialType.transparency,
       child: Container(
@@ -465,40 +475,6 @@ class _GridRowState extends State<GridRow> {
   }
 }
 
-class CategoryListScreen extends StatelessWidget {
-
-  final String categoryTitle;
-
-  CategoryListScreen(this.categoryTitle);
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      type: MaterialType.transparency,
-      child: Container(
-          padding: containerPadding(),
-          decoration: homeBackground(),
-      ),
-    );
-  }
-
-  BoxDecoration homeBackground() {
-    return BoxDecoration(
-      gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF00194A), Color(0xFF000318)]
-      ),
-    );
-  }
-
-  EdgeInsets containerPadding() {
-    return const EdgeInsets.only(
-        left: 20.0, right: 20.0, top: 60.0, bottom: 40.0
-    );
-  }
-}
-
 class SlideRightRoute extends PageRouteBuilder {
   final Widget page;
   SlideRightRoute({this.page})
@@ -523,4 +499,47 @@ class SlideRightRoute extends PageRouteBuilder {
           child: child,
         ),
   );
+}
+
+class CategoryListScreen extends StatelessWidget {
+
+  final String categoryTitle;
+
+  CategoryListScreen(this.categoryTitle);
+
+  void _setStatusBarColor() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Color(0xFF00194A)
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    _setStatusBarColor();
+
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+        padding: containerPadding(),
+        decoration: homeBackground(),
+      ),
+    );
+  }
+
+  BoxDecoration homeBackground() {
+    return BoxDecoration(
+      gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF00194A), Color(0xFF000318)]
+      ),
+    );
+  }
+
+  EdgeInsets containerPadding() {
+    return const EdgeInsets.only(
+        left: 20.0, right: 20.0, top: 60.0, bottom: 40.0
+    );
+  }
 }
