@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -46,22 +46,6 @@ class HomePage extends StatelessWidget {
     "Group": 5,
     "Other": 12
   };
-
-//  static Future<int> _getCategoryProgress(category) async {
-//    print(category);
-//    SharedPreferences preferences = await SharedPreferences.getInstance();
-//    int progress = preferences.getInt("${category}_progress" ?? 0);
-//    print(progress);
-//    return progress;
-//  }
-
-//  _incrementCategoryProgress(String category) {
-//    SharedPreferences.getInstance().then((preferences) {
-//      int progress = (preferences.getInt("${category}_progress") ?? 0) + 1;
-//      userScreenProgress[category] += 1;
-//      preferences.setInt("${category}_progress", progress);
-//    });
-//  }
 
   HomePage({Key key, this.title}) : super(key: key);
 
@@ -111,66 +95,6 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
-//  Widget gridRow(position) {
-//    return GestureDetector(
-//      onTap: _incrementCategoryProgress(headers[position]),
-//      child: Padding(
-//        padding: EdgeInsets.all(8.0),
-//        child: SizedBox(
-//            width: double.infinity,
-//            child: Container(
-//              decoration: rowBackground(),
-//              child: Column(
-//                crossAxisAlignment: CrossAxisAlignment.stretch,
-//                children: <Widget>[
-//                  Expanded(
-//                    flex: 7,
-//                    child: Container(
-//                      decoration: rowUpperHalfBackground(),
-//                      child: centerTextInRow(headers[position]),
-//                    ),
-//                  ),
-//                  Expanded(
-//                    flex: 3,
-//                    child: Container(
-//                      decoration: rowLowerHalfBackground(),
-//                      child: Column(
-//                        children: <Widget>[
-//                          Padding(
-//                            padding: EdgeInsets.only(top: 10.0, bottom: 6.0),
-//                            child: Text(
-//                              "${userScreenProgress[headers[position]]} of ${headerContentMap[headers[position]].length}",
-//                              textAlign: TextAlign.center,
-//                              style: TextStyle(
-//                                  letterSpacing: 1.0,
-//                                  fontSize: 12.0,
-//                                  fontWeight: FontWeight.w900,
-//                                  color: Color(headerColorMap[headers[position]])
-//                              ),
-//                            ),
-//                          ),
-//                          SizedBox(
-//                            width: double.infinity,
-//                            height: 10.0,
-//                            child: Stack(
-//                              children: <Widget>[
-//                                progressBlueprintWidget(),
-//                                actualProgressWidget(position)
-//                              ],
-//                            ),
-//                          )
-//                        ],
-//                      ),
-//                    ),
-//                  )
-//                ],
-//              ),
-//            )
-//        ),
-//      ),
-//    );
-//  }
 
   Widget progressBlueprintWidget() {
     return SizedBox(
@@ -380,30 +304,29 @@ class _GridRowState extends State<GridRow> {
     "Other": 0
   };
 
-//  static Future<int> _getCategoryProgress(category) async {
-//    print(category);
-//    SharedPreferences preferences = await SharedPreferences.getInstance();
-//    int progress = preferences.getInt("${category}_progress" ?? 0);
-//    print(progress);
-//    return progress;
+//  _incrementCategoryProgress(String category) {
+//    SharedPreferences.getInstance().then((preferences) {
+//      int progress = (preferences.getInt("${category}_progress") ?? 0) + 1;
+//      preferences.setInt("${category}_progress", progress).then((value) {
+//        setState(() {
+//          if(userScreenProgress[category] < headerContentMap[category].length)
+//            userScreenProgress[category] += 1;
+//        });
+//      });
+//    });
 //  }
 
-  _incrementCategoryProgress(String category) {
-    SharedPreferences.getInstance().then((preferences) {
-      int progress = (preferences.getInt("${category}_progress") ?? 0) + 1;
-      preferences.setInt("${category}_progress", progress).then((value) {
-        setState(() {
-          if(userScreenProgress[category] < headerContentMap[category].length)
-            userScreenProgress[category] += 1;
-        });
-      });
-    });
+  _openCategoryListScreen(String category) {
+    Navigator.push(
+        context,
+        SlideRightRoute(page: CategoryListScreen(category))
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _incrementCategoryProgress(headers[position]),
+      onTap: () => _openCategoryListScreen(headers[position]),
       child: Padding(
         padding: EdgeInsets.all(8.0),
         child: SizedBox(
@@ -540,5 +463,64 @@ class _GridRowState extends State<GridRow> {
       ),
     );
   }
+}
 
+class CategoryListScreen extends StatelessWidget {
+
+  final String categoryTitle;
+
+  CategoryListScreen(this.categoryTitle);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+          padding: containerPadding(),
+          decoration: homeBackground(),
+      ),
+    );
+  }
+
+  BoxDecoration homeBackground() {
+    return BoxDecoration(
+      gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF00194A), Color(0xFF000318)]
+      ),
+    );
+  }
+
+  EdgeInsets containerPadding() {
+    return const EdgeInsets.only(
+        left: 20.0, right: 20.0, top: 60.0, bottom: 40.0
+    );
+  }
+}
+
+class SlideRightRoute extends PageRouteBuilder {
+  final Widget page;
+  SlideRightRoute({this.page})
+      : super(
+    pageBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        ) =>
+    page,
+    transitionsBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child,
+        ) =>
+        SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, 2),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        ),
+  );
 }
