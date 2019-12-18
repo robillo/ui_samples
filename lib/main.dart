@@ -52,13 +52,13 @@ class HomePage extends StatelessWidget {
 
   Widget pickCategoryPrompt() {
     return Padding(
-      padding: EdgeInsets.only(top: 30.0),
+      padding: EdgeInsets.only(top: 30.0, left: 20.0, right: 20.0),
       child: SizedBox(
         width: double.infinity,
         child: Container(
             padding: EdgeInsets.only(left: 20.0, top: 15.0, right: 20.0, bottom: 15.0),
             decoration: BoxDecoration(
-                color: Color(0xFF08234E),
+                color: Color(0xFF191A1C),
                 borderRadius: BorderRadius.all(
                     Radius.circular(10.0)
                 )
@@ -69,7 +69,7 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.normal,
-                    color: Color(0xFFCCD9FF)
+                    color: Color(0xFFA2A2A2)
                 ),
               ),
             )
@@ -90,7 +90,7 @@ class HomePage extends StatelessWidget {
           style: TextStyle(
               fontSize: 14.0,
               fontWeight: FontWeight.normal,
-              color: Color(0xFF6C758D)
+              color: Color(0xFF8E8E8E)
           ),
         ),
       ),
@@ -180,7 +180,7 @@ class HomePage extends StatelessWidget {
   Widget layOutCategoryGrid() {
     return Expanded(
       child: Padding(
-          padding: EdgeInsets.only(top: 26.0),
+          padding: EdgeInsets.only(top: 26.0, left: 12.0, right: 12.0),
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2
@@ -219,12 +219,38 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  Widget titleSubtitleGroup() {
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        padding: titleTopPadding(),
+        decoration: BoxDecoration(
+          color: Color(0xFF191A1C),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            homeHeading(),
+            homeSubHeading()
+          ],
+        ),
+      ),
+    );
+  }
+
+  EdgeInsets titleTopPadding() {
+    return EdgeInsets.only(top: 60.0, left: 20.0, right: 20.0, bottom: 16.0);
+  }
+
+  EdgeInsets leftRightPadding() {
+    return EdgeInsets.only(left: 20.0, right: 20.0);
+  }
+
   Widget columnComponents() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        homeHeading(),
-        homeSubHeading(),
+        titleSubtitleGroup(),
         pickCategoryPrompt(),
         layOutCategoryGrid(),
         tathastuSignature()
@@ -233,24 +259,18 @@ class HomePage extends StatelessWidget {
   }
 
   BoxDecoration homeBackground() {
-    return BoxDecoration(
-      gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF00194A), Color(0xFF000318)]
-      ),
-    );
+    return BoxDecoration(color: Color(0xFF121214));
   }
 
   EdgeInsets containerPadding() {
     return const EdgeInsets.only(
-        left: 20.0, right: 20.0, top: 60.0, bottom: 40.0
+        bottom: 40.0
     );
   }
 
   void _setStatusBarColor() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF00194A)
+        statusBarColor: Color(0xFF191A1C)
     ));
   }
 
@@ -272,7 +292,7 @@ class HomePage extends StatelessWidget {
 
 class GridRow extends StatefulWidget {
 
-  int position;
+  final int position;
 
   GridRow(this.position);
 
@@ -349,25 +369,23 @@ class _GridRowState extends State<GridRow> {
                   Expanded(
                     flex: 7,
                     child: Container(
-                      decoration: rowUpperHalfBackground(),
                       child: centerTextInRow(headers[position]),
                     ),
                   ),
                   Expanded(
                     flex: 3,
                     child: Container(
-                      decoration: rowLowerHalfBackground(),
                       child: Column(
                         children: <Widget>[
                           Padding(
-                            padding: EdgeInsets.only(top: 10.0, bottom: 6.0),
+                            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                             child: Text(
                               "${userScreenProgress[headers[position]]} of ${headerContentMap[headers[position]].length}",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   letterSpacing: 1.0,
                                   fontSize: 12.0,
-                                  fontWeight: FontWeight.w900,
+                                  fontWeight: FontWeight.w400,
                                   color: Color(headerColorMap[headers[position]])
                               ),
                             ),
@@ -396,29 +414,9 @@ class _GridRowState extends State<GridRow> {
 
   BoxDecoration rowBackground() {
     return BoxDecoration(
-        color: Color(0xFF051A36),
+        color: Color(0xFF191A1C),
         borderRadius: BorderRadius.all(
             Radius.circular(6.0)
-        )
-    );
-  }
-
-  BoxDecoration rowUpperHalfBackground() {
-    return BoxDecoration(
-        color: Color(0xFF0D294C),
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(6.0),
-            topRight: Radius.circular(6.0)
-        )
-    );
-  }
-
-  BoxDecoration rowLowerHalfBackground() {
-    return BoxDecoration(
-        color: Color(0xFF051A36),
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(6.0),
-            bottomRight: Radius.circular(6.0)
         )
     );
   }
@@ -432,7 +430,7 @@ class _GridRowState extends State<GridRow> {
             left: 10.0, right: 10.0
         ),
         decoration: BoxDecoration(
-            color: Color(0xFF205491),
+            color: Color(0xFF000000),
             borderRadius: BorderRadius.all(
                 Radius.circular(5.0)
             )
@@ -493,7 +491,7 @@ class SlideRightRoute extends PageRouteBuilder {
         ) =>
         SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(0, 2),
+            begin: const Offset(1, 0),
             end: Offset.zero,
           ).animate(animation),
           child: child,
@@ -509,7 +507,7 @@ class CategoryListScreen extends StatelessWidget {
 
   void _setStatusBarColor() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF00194A)
+        statusBarColor: Color(0xFF191A1C)
     ));
   }
 
@@ -522,18 +520,14 @@ class CategoryListScreen extends StatelessWidget {
       type: MaterialType.transparency,
       child: Container(
         padding: containerPadding(),
-        decoration: homeBackground(),
+        decoration: categoryBackground(),
       ),
     );
   }
 
-  BoxDecoration homeBackground() {
+  BoxDecoration categoryBackground() {
     return BoxDecoration(
-      gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF00194A), Color(0xFF000318)]
-      ),
+      color: Color(0xFF121214)
     );
   }
 
